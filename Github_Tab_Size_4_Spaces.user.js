@@ -9,6 +9,7 @@
 // @match         https://gist.github.com/*/*
 // @match         https://raw.githubusercontent.com/*/*
 // @run-at        document-start
+// @icon        https://github.githubassets.com/pinned-octocat.svg
 // ==/UserScript==
 //基于https://github.com/sindresorhus/tab-size-on-github
 (function() {var css = [
