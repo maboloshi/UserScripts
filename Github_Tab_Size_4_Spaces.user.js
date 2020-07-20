@@ -2,7 +2,7 @@
 // @name          GitHub Tab Size (4 spaces)
 // @version       0.1
 // @namespace     https://github.com/maboloshi/UserScripts
-// @description	  将github和gist上的代码Tab缩进设为4个空格
+// @description	  将github和gist上的代码缩进设为4个空格
 // @author        maboloshi <https://github.com/maboloshi>
 // @homepage      https://github.com/maboloshi/UserScripts/blob/master/Github_Tab_Size_4_Spaces.user.js
 // @match         https://github.com/*/*
