@@ -9,4 +9,5 @@
 // @include             http*://*.wikipedia.org/*/*
 // @run-at              document-start
 // ==/UserScript==
-window.location.replace(document.location.href.replace(/https?:\/\/([\w-]+)\.wikipedia\.org\/[\w-]+/, 'https://www.wikiwand.com/zh'));
+var language =  navigator.language ? navigator.language.toLowerCase() : 'zh'
+window.location.replace(document.location.href.replace(/https?:\/\/([\w-]+)\.wikipedia\.org\/[\w-]+/, 'https://www.wikiwand.com/'+ language));
