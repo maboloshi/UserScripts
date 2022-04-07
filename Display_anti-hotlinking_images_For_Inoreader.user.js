@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name             显示防盗链图片 for Inoreader
 // @name:en          Display anti-hotlinking images For Inoreader
-// @version          0.1
+// @version          0.1.1
 // @namespace        https://github.com/maboloshi/UserScripts/
 // @description      通过强制全站不发送 referrer， 实现显示防盗链图片
 // @description:en   Display anti-hotlinking images, for forced not send a referrer.
