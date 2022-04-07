@@ -5,8 +5,8 @@
 // @namespace        https://github.com/maboloshi/UserScripts/
 // @description      通过强制全站不发送 referrer， 实现显示防盗链图片
 // @description:en   Display anti-hotlinking images, for forced not send a referrer.
-// @include          http://www.inoreader.com/*
-// @include          https://www.inoreader.com/*
+// @include          http*://www.inoreader.com/*
+// @include          http*://www.innoreader.com/*
 // @icon             http://www.inoreader.com/favicon.ico
 // @grant none
 // ==/UserScript==
