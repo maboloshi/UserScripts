@@ -1,12 +1,14 @@
 // ==UserScript==
-// @name        隐藏 Github Gist 删除按钮
-// @name.en     Hide Delete button for GitHub Gist
-// @version     0.1.0
-// @namespace   https://github.com/maboloshi/UserScripts/
-// @match       https://gist.github.com/*/*
-// @grant       GM_registerMenuCommand
-// @icon        https://github.githubassets.com/pinned-octocat.svg
-// @run-at      document-end
+// @name            隐藏 Github Gist 删除按钮
+// @name.en         Hide Delete button for GitHub Gist
+// @version         0.1.0
+// @description     隐藏 Github Gist 删除按钮
+// @description:en  Hide Delete button for GitHub Gist
+// @namespace       https://github.com/maboloshi/UserScripts/
+// @match           https://gist.github.com/*/*
+// @grant           GM_registerMenuCommand
+// @icon            https://github.githubassets.com/pinned-octocat.svg
+// @run-at          document-end
 // ==/UserScript==
 (function () {
     'use strict';
@@ -15,7 +17,7 @@
    var el = document.getElementsByClassName("btn-danger btn-sm btn")[0]
 
    if (!el) {
-     return;     
+     return;
     }
   el.style.display = 'none';
 
@@ -26,9 +28,9 @@
         el.style.display = 'none';
       } else {
         el.style.display = '';
-      }      
+      }
     }
-  
-  //console.log("==> 退出 Hide Delete button for GitHub Gist");  
-  
+
+  //console.log("==> 退出 Hide Delete button for GitHub Gist");
+
 })();
