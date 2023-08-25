@@ -14,19 +14,19 @@
   'use strict';
   console.log("==> 载入 Hide Delete button for GitHub Gist");
 
-   var el = document.querySelector('.btn-danger.btn-sm.btn');
+  var el = document.querySelector('.btn-danger.btn-sm.btn');
 
-   if (el) {
-     el.style.display = 'none';
-    }
+  if (el) {
+    el.style.display = 'none';
+  }
 
-   // 注册菜单
-    GM_registerMenuCommand("显示/隐藏\"删除按钮\"", toggle);
-    function toggle() {
-      if (el) {
-        el.style.display = el.style.display === 'none' ? '' : 'none';
-      }
+  // 注册菜单
+  GM_registerMenuCommand("显示/隐藏\"删除按钮\"", toggle);
+  function toggle() {
+    if (el) {
+      el.style.display = el.style.display === 'none' ? '' : 'none';
     }
+  }
 
 //console.log("==> 退出 Hide Delete button for GitHub Gist");
 
