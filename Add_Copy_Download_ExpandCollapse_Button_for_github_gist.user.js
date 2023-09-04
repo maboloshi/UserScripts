@@ -59,7 +59,7 @@
   // 创建按钮
   function createButton(text, tooltip) {
     const button = document.createElement('div');
-    button.classList.add('btn', 'btn-sm', 'tooltipped', 'tooltipped-sw');
+    button.classList.add('btn', 'btn-sm', 'tooltipped', 'tooltipped-n');
     button.textContent = text;
     button.setAttribute('aria-label', tooltip);
     return button;
