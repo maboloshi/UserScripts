@@ -24,6 +24,7 @@
     GM_addStyle(`
       @media print { #GoTop { display: none !important; } }
       .GoTopBtn { position: fixed; right: 13px; bottom: 0%; cursor: pointer; z-index: 999; }
+      .invert { filter: invert(100%);}
     `);
 
     goTopBtn = document.createElement('div');
@@ -42,7 +43,7 @@
     var github_mode = document.documentElement.getAttribute('data-color-mode');
     var system_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (goTopBtn) {
-      goTopBtn.style.filter = "light" === github_mode ? "" : "dark" === github_mode || system_dark ? "invert(100%)" : "";
+      goTopBtn.classList.toggle('invert', github_mode !== "light" && (github_mode === "dark" || system_dark));
     }
   }
 
