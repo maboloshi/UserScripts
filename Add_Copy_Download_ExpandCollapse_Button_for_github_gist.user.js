@@ -111,7 +111,7 @@
   // 初始化折叠/展开全部按钮
   function initializeExpandCollapseAll() {
     const pageHeadActions = document.querySelector('.pagehead-actions');
-    const expandCollapseAllBtn = createButton('折叠全部', '折叠/全部');
+    const expandCollapseAllBtn = createButton('折叠全部', '折叠/展开全部文件');
     const listItem = document.createElement('li');
     listItem.appendChild(expandCollapseAllBtn);
     pageHeadActions.appendChild(listItem);
