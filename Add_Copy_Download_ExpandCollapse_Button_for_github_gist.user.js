@@ -22,18 +22,17 @@
     .gist-expand-collapse-btn { margin: 0 0 0 6px; }
     .copy-download-btn { width: 28px; text-align: center; padding-left: 0px; padding-right: 0px; }
     .collapsed { display: none; }
-    .showNotification { position: fixed; left: 20px; bottom: 5px; z-index: 999; }
   `);
 
   // 将文本复制到剪贴板
-  function copyToClipboard(text) {
+  function copyToClipboard(el, text) {
     try {
       GM_setClipboard(text);
       console.log('✅ 复制成功');
-      showNotification('✅ 复制成功');
+      showNotification(el, '✅ 复制成功');
     } catch (error) {
       console.log('❌ 复制失败', error);
-      showNotification('❌ 复制失败');
+      showNotification(el, '❌ 复制失败');
     }
   }
 
@@ -46,13 +45,11 @@
   }
 
   // 显示通知
-  function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.classList.add('showNotification');
-    notification.textContent = message;
-    document.body.appendChild(notification);
+  function showNotification(el, message) {
+    const originalText = el.getAttribute("aria-label");
+    el.setAttribute("aria-label", message);
     setTimeout(() => {
-      notification.remove();
+      el.setAttribute("aria-label", originalText);
     }, 2000);
   }
 
@@ -70,7 +67,7 @@
     const files = document.querySelectorAll('.file');
 
     files.forEach(file => {
-      const fileAction = file.querySelector('.file-actions');
+      const fileAction = file.querySelector('.file-header > .file-actions');
 
       // 创建复制按钮
       const copyBtn = createButton('复制', '复制原始文件');
@@ -79,8 +76,9 @@
       fileAction.appendChild(copyBtn);
 
       copyBtn.addEventListener('click', () => {
-        const fileContent = file.querySelector('[name="gist[content]"]').innerHTML;
-        copyToClipboard(fileContent);
+        const filebox = file.querySelector('[name="gist[content]"]');
+        const fileContent = filebox?.innerText || file.querySelector('[itemprop="text"] > div > table')?.innerText.replace(/(^\t\n|^\t|\n\t)/g, (match) => match === '\n\t' ? '\n' : '');
+        copyToClipboard(copyBtn, fileContent);
       });
 
       // 创建下载按钮
@@ -91,7 +89,7 @@
 
       downloadBtn.addEventListener('click', () => {
         const url = fileAction.firstElementChild.href;
-        const filename = file.querySelector('.gist-blob-name').textContent.trim();
+        const filename = file.querySelector('.gist-blob-name').innerText;
         downloadFile(url, filename);
       });
 
@@ -114,7 +112,6 @@
   function initializeExpandCollapseAll() {
     const pageHeadActions = document.querySelector('.pagehead-actions');
     const expandCollapseAllBtn = createButton('折叠全部', '折叠/全部');
-    // expandCollapseAllBtn.classList.add('gist-expand-collapse-all-btn');
     const listItem = document.createElement('li');
     listItem.appendChild(expandCollapseAllBtn);
     pageHeadActions.appendChild(listItem);
