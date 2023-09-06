@@ -18,7 +18,7 @@
 // ==/UserScript==
 
 (function () {
-  var goTopBtn = null;
+  let goTopBtn = null;
 
   function addIcon() {
 
@@ -42,16 +42,16 @@
   }
 
   function toggleMode() {
-    var github_mode = document.documentElement.getAttribute('data-color-mode');
-    var system_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const github_mode = document.documentElement.getAttribute('data-color-mode');
+    const system_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (goTopBtn) {
       goTopBtn.classList.toggle('invert', "light" !== github_mode && ("dark" === github_mode || system_dark));
     }
   }
 
   function scrollToTop(scrollDuration) {
-    var scrollStep = -window.scrollY / (scrollDuration / 15);
-    var scrollInterval = setInterval(function() {
+    const scrollStep = -window.scrollY / (scrollDuration / 15);
+    const scrollInterval = setInterval(() => {
       if (window.scrollY !== 0) {
         window.scrollBy(0, scrollStep);
       } else {
