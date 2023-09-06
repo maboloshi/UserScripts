@@ -23,14 +23,14 @@
   function addIcon() {
 
     GM_addStyle(`
-      @media print { #GoTop { display: none !important; } }
+      @media print { .GoTopBtn__no-print { display: none !important; } }
       .GoTopBtn { position: fixed; right: 13px; bottom: 0%; cursor: pointer; z-index: 999; display: none; }
-      .invert { filter: invert(100%);}
+      .GoTopBtn__invert { filter: invert(100%);}
+      .GoTopBtn__hide { display: none !important; }
     `);
 
     goTopBtn = document.createElement('div');
-    goTopBtn.setAttribute('id', 'GoTop');
-    goTopBtn.classList.add('GoTopBtn', 'tooltipped', 'tooltipped-n');
+    goTopBtn.classList.add('GoTopBtn', 'GoTopBtn__no-print', 'GoTopBtn__hide', 'tooltipped', 'tooltipped-n');
     goTopBtn.innerHTML = `<svg viewBox="0 0 16 16" width="48" height="48"><path d="M3.47 7.78a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0l4.25 4.25a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018L9 4.81v7.44a.75.75 0 0 1-1.5 0V4.81L4.53 7.78a.75.75 0 0 1-1.06 0Z"></path></svg>`;
     goTopBtn.setAttribute('aria-label', "回到顶部");
     document.body.appendChild(goTopBtn);
@@ -45,7 +45,7 @@
     const github_mode = document.documentElement.getAttribute('data-color-mode');
     const system_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (goTopBtn) {
-      goTopBtn.classList.toggle('invert', "light" !== github_mode && ("dark" === github_mode || system_dark));
+      goTopBtn.classList.toggle('GoTopBtn__invert', "light" !== github_mode && ("dark" === github_mode || system_dark));
     }
   }
 
@@ -65,7 +65,7 @@
 
     // 当页面滚动时显示/隐藏返回顶部按钮
     window.addEventListener('scroll', () => {
-      goTopBtn.style.display = document.body.scrollTop > 20 || document.documentElement.scrollTop > 20 ? 'block' : 'none';
+      goTopBtn.classList.toggle('GoTopBtn__hide', !(document.body.scrollTop > 20 || document.documentElement.scrollTop > 20));
     });
   }
 
