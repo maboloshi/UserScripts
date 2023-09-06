@@ -12,8 +12,7 @@
 // @icon          https://github.githubassets.com/pinned-octocat.svg
 // @note          在 https://github.com/gaojr/scripts-styles/blob/master/scripts/github-go-top.user.js 基础上改进
 // @note          1. 打印页面时隐藏图标
-// @note          2. 修复因 GitHub 新`ajax`载入方式, 导致切换页面时图标消失
-// @note          3. 自适应系统或 GitHub 明暗主题, 自动切换明暗模式
+// @note          2. 自适应系统或 GitHub 明暗主题, 自动切换明暗模式
 // ==/UserScript==
 
 (function () {
@@ -43,24 +42,7 @@
     var github_mode = document.documentElement.getAttribute('data-color-mode');
     var system_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (goTopBtn) {
-      goTopBtn.classList.toggle('invert', github_mode !== "light" && (github_mode === "dark" || system_dark));
-    }
-  }
-
-  function observeMutation(mutations) {
-    for (let mutation of mutations) {
-      if (mutation.addedNodes.length > 0) {
-        for (const node of mutation.addedNodes) {
-          if (node.nodeName === 'BODY') {
-            addIcon();
-            toggleMode();
-            return;
-          }
-        }
-      } else if (mutation.type === 'attributes') {
-        toggleMode();
-        return;
-      }
+      goTopBtn.classList.toggle('invert', "light" !== github_mode && ("dark" === github_mode || system_dark));
     }
   }
 
@@ -68,10 +50,13 @@
     addIcon();
     toggleMode();
 
+    // 监视系统的明暗主题设置
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', toggleMode);
 
-    new window.MutationObserver(observeMutation).observe(document.documentElement, {
-      childList: true,
+    // 监视 GitHub 的明暗主题设置
+    new window.MutationObserver(mutations => {
+      toggleMode();
+    }).observe(document.documentElement, {
       attributeFilter: ['data-color-mode']
     });
   }
