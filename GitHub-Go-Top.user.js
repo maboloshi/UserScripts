@@ -37,7 +37,7 @@
 
     goTopBtn.addEventListener('click', () => {
       // 页面平滑滚动到页面顶部
-      scrollToTop(500); // 滚动时间为0.5秒（500毫秒）
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
@@ -47,17 +47,6 @@
     if (goTopBtn) {
       goTopBtn.classList.toggle('invert', "light" !== github_mode && ("dark" === github_mode || system_dark));
     }
-  }
-
-  function scrollToTop(scrollDuration) {
-    const scrollStep = -window.scrollY / (scrollDuration / 15);
-    const scrollInterval = setInterval(() => {
-      if (window.scrollY !== 0) {
-        window.scrollBy(0, scrollStep);
-      } else {
-        clearInterval(scrollInterval);
-      }
-    }, 15);
   }
 
   function init() {
