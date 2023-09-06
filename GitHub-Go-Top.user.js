@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          GithubGoTop
 // @name:CN-zh_cn Github一键返回顶部
-// @version       0.5.2
+// @version       0.5.3
 // @description   scrolltop
 // @author        gaojr, maboloshi
 // @namespace     https://github.com/maboloshi/UserScripts
@@ -13,6 +13,8 @@
 // @note          在 https://github.com/gaojr/scripts-styles/blob/master/scripts/github-go-top.user.js 基础上改进
 // @note          1. 打印页面时隐藏图标
 // @note          2. 自适应系统或 GitHub 明暗主题, 自动切换明暗模式
+// @note          3. 点击按钮, 平滑滚动到页面顶部
+// @note          4. 页面在顶部或滚动到时隐藏按钮
 // ==/UserScript==
 
 (function () {
@@ -22,7 +24,7 @@
 
     GM_addStyle(`
       @media print { #GoTop { display: none !important; } }
-      .GoTopBtn { position: fixed; right: 13px; bottom: 0%; cursor: pointer; z-index: 999; }
+      .GoTopBtn { position: fixed; right: 13px; bottom: 0%; cursor: pointer; z-index: 999; display: none; }
       .invert { filter: invert(100%);}
     `);
 
@@ -34,7 +36,8 @@
     document.body.appendChild(goTopBtn);
 
     goTopBtn.addEventListener('click', () => {
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
+      // 页面平滑滚动到页面顶部
+      scrollToTop(500); // 滚动时间为0.5秒（500毫秒）
     });
   }
 
@@ -44,6 +47,17 @@
     if (goTopBtn) {
       goTopBtn.classList.toggle('invert', "light" !== github_mode && ("dark" === github_mode || system_dark));
     }
+  }
+
+  function scrollToTop(scrollDuration) {
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+    var scrollInterval = setInterval(function() {
+      if (window.scrollY !== 0) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
   }
 
   function init() {
@@ -58,6 +72,11 @@
       toggleMode();
     }).observe(document.documentElement, {
       attributeFilter: ['data-color-mode']
+    });
+
+    // 当页面滚动时显示/隐藏返回顶部按钮
+    window.addEventListener('scroll', () => {
+      goTopBtn.style.display = document.body.scrollTop > 20 || document.documentElement.scrollTop > 20 ? 'block' : 'none';
     });
   }
 
