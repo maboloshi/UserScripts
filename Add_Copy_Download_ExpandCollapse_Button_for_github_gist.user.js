@@ -37,10 +37,18 @@
   }
 
   // 下载文件
-  function downloadFile(url, filename) {
+  function downloadFile(el，fileUrl, fileName) {
     GM_download({
-      url: url,
-      name: filename
+      url: fileUrl,
+      name: fileName,
+      onload: () => {
+          console.log('✅ 文件下载完成');
+          showNotification(el, '✅ 文件下载完成');
+      },
+      onerror: (error) => {
+          console.log('❌ 下载出错:', error);
+          showNotification(el, '❌ 下载出错');
+      }
     });
   }
 
@@ -90,7 +98,7 @@
       downloadBtn.addEventListener('click', () => {
         const url = fileAction.firstElementChild.href;
         const filename = file.querySelector('.gist-blob-name').innerText;
-        downloadFile(url, filename);
+        downloadFile(downloadBtn, fileUrl, fileName);
       });
 
       // 创建折叠/展开按钮
