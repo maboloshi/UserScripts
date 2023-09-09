@@ -24,7 +24,7 @@
 
     GM_addStyle(`
       @media print { .GoTopBtn__no-print { display: none !important; } }
-      .GoTopBtn { position: fixed; right: 13px; bottom: 0%; cursor: pointer; z-index: 999; display: none; }
+      .GoTopBtn { position: fixed; right: 13px; bottom: 0%; cursor: pointer; z-index: 999; }
       .GoTopBtn__invert { filter: invert(100%);}
       .GoTopBtn__hide { display: none !important; }
     `);
