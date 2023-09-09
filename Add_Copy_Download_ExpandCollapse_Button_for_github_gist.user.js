@@ -1,15 +1,16 @@
 // ==UserScript==
-// @name            Github Gists: 添加复制、下载和展开/折叠文件按钮
-// @name.en         Github Gists: Add copy, download and expand/collapse file buttons
+// @name            Github Gists: 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
+// @name.en         Github Gists: Add copy, download and expand/collapse file buttons, hide/show delete button
 // @namespace       https://github.com/maboloshi/UserScripts/
-// @version         0.2
-// @description     为 GitHub Gists 添加复制、下载和展开/折叠文件按钮
-// @description.en  Adds copy, download and expand/collapse file buttons for GitHub Gists
+// @version         0.3
+// @description     为 GitHub Gists 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
+// @description.en  Adds copy, download, expand/collapse file buttons and hide/show delete button for GitHub Gists
 // @author          maboloshi
-// @match           https://gist.github.com/*/*
+// @match           https://gist.github.com/*
 // @grant           GM_addStyle
 // @grant           GM_setClipboard
 // @grant           GM_download
+// @grant           GM_registerMenuCommand
 // @icon            https://github.githubassets.com/pinned-octocat.svg
 // @run-at          document-end
 // ==/UserScript==
@@ -37,7 +38,7 @@
   }
 
   // 下载文件
-  function downloadFile(el，fileUrl, fileName) {
+  function downloadFile(el, fileUrl, fileName) {
     GM_download({
       url: fileUrl,
       name: fileName,
@@ -141,7 +142,48 @@
     });
   }
 
-  // 初始化按钮和折叠/展开全部按钮
-  initializeButtons();
-  initializeExpandCollapseAll();
+  // 显示隐藏删除按钮
+  function deleteBtnToggle() {
+    const deleteBtn = document.querySelector('.btn-danger.btn-sm.btn');
+    deleteBtn && (deleteBtn.style.display = deleteBtn.style.display === 'none' ? '' : 'none');
+  }
+
+  function init() {
+    const isGistpage = () => /^https:\/\/gist\.github\.com\/[\w-]+\/[a-f0-9]{32}(?:#)?$/.test(location.href);
+
+    const loadButtons = () => {
+      initializeButtons();
+      initializeExpandCollapseAll();
+      deleteBtnToggle();
+    }
+
+    // 页面跳转后重新加载
+    const reload = () => {
+      new window.MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+          const removedNodes = mutation.removedNodes;
+          if (removedNodes.length > 0 && removedNodes[0].matches('div.turbo-progress-bar') && isGistpage()) {
+            loadButtons();
+            return;
+          }
+        });
+      }).observe(document.documentElement, {
+        childList: true
+      })
+    };
+
+    const load = () => {
+      if (isGistpage()) {
+          loadButtons();
+      }
+    }
+
+    load();
+    reload();
+  }
+
+  // 注册菜单
+  GM_registerMenuCommand("显示/隐藏\"删除按钮\"", deleteBtnToggle);
+
+  init();
 })();
