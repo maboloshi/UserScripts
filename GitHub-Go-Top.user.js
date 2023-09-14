@@ -31,7 +31,7 @@
 
     goTopBtn = document.createElement('div');
     goTopBtn.classList.add('GoTopBtn', 'GoTopBtn__no-print', 'GoTopBtn__hide', 'tooltipped', 'tooltipped-n');
-    goTopBtn.innerHTML = `<svg viewBox="0 0 16 16" width="48" height="48"><path d="M3.47 7.78a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0l4.25 4.25a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018L9 4.81v7.44a.75.75 0 0 1-1.5 0V4.81L4.53 7.78a.75.75 0 0 1-1.06 0Z"></path></svg>`;
+    goTopBtn.textContent = '🔝' ;
     goTopBtn.setAttribute('aria-label', "回到顶部");
     document.body.appendChild(goTopBtn);
 
