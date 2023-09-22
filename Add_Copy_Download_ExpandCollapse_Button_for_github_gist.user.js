@@ -68,7 +68,7 @@
       console.log('✅ 复制成功');
       showNotification(el, '✅ 复制成功');
     } else {
-      console.log('❌ 复制失败');
+      console.error('❌ 复制失败');
       showNotification(el, '❌ 复制失败');
     }
   }
@@ -83,7 +83,7 @@
           showNotification(el, '✅ 文件下载完成');
       },
       onerror: (error) => {
-          console.log('❌ 下载出错:', error);
+          console.error('❌ 下载出错:', error);
           showNotification(el, '❌ 下载出错');
       }
     });
@@ -98,24 +98,27 @@
     }, 2000);
   }
 
-  function getRawText(fileUrl, callback) {
-    GM_xmlhttpRequest({
-      method: "GET",
-      url: fileUrl,
-      onload: (res) => {
-        try {
-          const { status, response } = res;
-          const RawText = (status === 200) ? response : "";
-          callback(RawText);
-        } catch (error) {
-          console.error('获取失败', error);
-          callback("获取失败");
+  // 获取原文内容
+  function getRawText(fileUrl) {
+    return new Promise((resolve, reject) => {
+      GM_xmlhttpRequest({
+        method: "GET",
+        url: fileUrl,
+        onload: (res) => {
+          try {
+            const { status, response } = res;
+            const rawText = (status === 200) ? response : "";
+            resolve(rawText);
+          } catch (error) {
+            console.error('获取失败', error);
+            reject("获取失败");
+          }
+        },
+        onerror: (error) => {
+          console.error('网络请求失败', error);
+          reject("网络请求失败");
         }
-      },
-      onerror: (error) => {
-        console.error('网络请求失败', error);
-        callback("网络请求失败");
-      }
+      });
     });
   }
 
@@ -147,16 +150,10 @@
         `<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-copy"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>`,
         'btn', 'copy-download-btn'
       );
-      copyBtn.addEventListener('click', () => {
+      copyBtn.addEventListener('click', async () => {
         const fileBox = file.querySelector('[name="gist[content]"]');
-        if (fileBox) {
-          const fileContent = fileBox.innerText;
-          copyToClipboard(copyBtn, fileContent);
-        } else {
-          getRawText(fileUrl, text => {
-            copyToClipboard(copyBtn, text);
-          });
-        }
+        const fileContent = fileBox?.innerText || await getRawText(fileUrl);
+        copyToClipboard(copyBtn, fileContent);
       });
       fileAction.appendChild(copyBtn);
 
