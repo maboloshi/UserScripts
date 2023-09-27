@@ -292,7 +292,7 @@
         mutations.forEach(mutation => {
           const removedNodes = mutation.removedNodes;
           if (removedNodes.length > 0 && removedNodes[0].matches('div.turbo-progress-bar')) {
-             if (isGistpage()) {
+             if (isGistPage()) {
                loadButtons();
              }
              deleteBtnToggle();
