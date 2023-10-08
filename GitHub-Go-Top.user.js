@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          GithubGoTop
 // @name:CN-zh_cn Github一键返回顶部
-// @version       0.5.3
+// @version       0.5.4
 // @description   scrolltop
 // @author        gaojr, maboloshi
 // @namespace     https://github.com/maboloshi/UserScripts
@@ -42,16 +42,16 @@
   }
 
   function toggleMode() {
-    const github_mode = document.documentElement.getAttribute('data-color-mode');
+    const github_mode = document.documentElement.dataset.colorMode;
     const system_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDarkMode = github_mode !== "light" && (github_mode === "dark" || system_dark);
     if (goTopBtn) {
-      goTopBtn.classList.toggle('GoTopBtn__invert', "light" !== github_mode && ("dark" === github_mode || system_dark));
+      goTopBtn.classList.toggle('GoTopBtn__invert', isDarkMode);
     }
   }
 
   function init() {
     addIcon();
-    toggleMode();
 
     // 监视系统的明暗主题设置
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', toggleMode);
@@ -62,6 +62,8 @@
     }).observe(document.documentElement, {
       attributeFilter: ['data-color-mode']
     });
+
+    toggleMode();
 
     // 当页面滚动时显示/隐藏返回顶部按钮
     window.addEventListener('scroll', () => {
