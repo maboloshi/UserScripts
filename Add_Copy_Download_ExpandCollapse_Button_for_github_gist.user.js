@@ -2,7 +2,7 @@
 // @name            Github Gists: 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @name.en         Github Gists: Add copy, download and expand/collapse file buttons, hide/show delete button
 // @namespace       https://github.com/maboloshi/UserScripts/
-// @version         0.5.1
+// @version         0.5.2
 // @description     为 GitHub Gists 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @description.en  Adds copy, download, expand/collapse file buttons and hide/show delete button for GitHub Gists
 // @author          maboloshi
@@ -306,18 +306,14 @@
     // 页面跳转后重新加载
     const reload = () => {
       new window.MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-          const removedNodes = mutation.removedNodes;
-          if (removedNodes.length > 0 && removedNodes[0].matches('div.turbo-progress-bar')) {
-             if (isGistPage()) {
-               loadButtons();
-             }
-             deleteBtnToggle();
-             return;
-          }
-        });
+        if (!document.documentElement.hasAttribute('aria-busy')) {
+           if (isGistPage()) {
+             loadButtons();
+           }
+           deleteBtnToggle();
+        }
       }).observe(document.documentElement, {
-        childList: true
+        attributeFilter: ['aria-busy']
       })
     };
 
