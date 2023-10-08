@@ -42,7 +42,7 @@
   }
 
   function toggleMode() {
-    const github_mode = document.documentElement.dataset.colorMode;
+    const github_mode = document.documentElement.getAttribute('data-color-mode');
     const system_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isDarkMode = github_mode !== "light" && (github_mode === "dark" || system_dark);
     if (goTopBtn) {
