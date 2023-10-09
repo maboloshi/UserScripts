@@ -2,7 +2,7 @@
 // @name            Github Gists: 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @name.en         Github Gists: Add copy, download and expand/collapse file buttons, hide/show delete button
 // @namespace       https://github.com/maboloshi/UserScripts/
-// @version         0.5.5
+// @version         0.5.6
 // @description     为 GitHub Gists 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @description.en  Adds copy, download, expand/collapse file buttons and hide/show delete button for GitHub Gists
 // @author          maboloshi
@@ -35,6 +35,15 @@
 
       background: transparent;
       color: var(--fgColor-muted, var(--color-fg-muted));
+    }
+    .gist-expand-collapse-btn > :last-child {
+      display: none;
+    }
+    .gist-expand-collapse-btn-collapsed > :first-child {
+      display: none;
+    }
+    .gist-expand-collapse-btn-collapsed > :last-child {
+      display: block !important;
     }
     .gist-expand-collapse-btn:hover, .copy-download-btn > svg:hover {
       color: var(--fgColor-accent, var(--color-accent-fg));
@@ -193,7 +202,7 @@
       '折叠文件',
       `
       <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-down Details-content--hidden"><path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z"></path></svg>
-      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-right Details-content--shown gist-btn-hide"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-right Details-content--shown"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
       `,
       'gist-expand-collapse-btn', !allowExpandCollapseBtnLeftFloat && 'gist-expand-collapse-btn-right'
       );
@@ -231,11 +240,9 @@
       // 创建折叠/展开按钮
       const expandCollapseBtn = expandCollapseBtnTmp.cloneNode(true);
       expandCollapseBtn.addEventListener('click', () => {
-        const [expandIcon, collapseIcon] = expandCollapseBtn.children;
         const isExpanded = expandCollapseBtn.getAttribute('aria-label') === '折叠文件';
 
-        expandIcon.classList.toggle('gist-btn-hide');
-        collapseIcon.classList.toggle('gist-btn-hide');
+        expandCollapseBtn.classList.toggle('gist-expand-collapse-btn-collapsed');
         expandCollapseBtn.setAttribute('aria-label', isExpanded ? '展开文件' : '折叠文件');
         file.children[1].classList.toggle('gist-file-box-collapsed');
       });
@@ -266,11 +273,9 @@
       const expandCollapseBtnsArray = [...expandCollapseBtns]; // 缓存查询结果
 
       expandCollapseBtnsArray.forEach(expandCollapseBtn => {
-        const [expandIcon, collapseIcon] = expandCollapseBtn.children;
         const fileContainer = expandCollapseBtn.parentElement.nextElementSibling;
 
-        expandIcon.classList.toggle('gist-btn-hide', isExpandedAll);
-        collapseIcon.classList.toggle('gist-btn-hide', !isExpandedAll);
+        expandCollapseBtn.classList.toggle('gist-expand-collapse-btn-collapsed', isExpandedAll);
         expandCollapseBtn.setAttribute('aria-label', isExpandedAll ? '展开文件' : '折叠文件');
         fileContainer.classList.toggle('gist-file-box-collapsed', isExpandedAll);
       });
