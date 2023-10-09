@@ -2,7 +2,7 @@
 // @name            Github Gists: 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @name.en         Github Gists: Add copy, download and expand/collapse file buttons, hide/show delete button
 // @namespace       https://github.com/maboloshi/UserScripts/
-// @version         0.5.4
+// @version         0.5.5
 // @description     为 GitHub Gists 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @description.en  Adds copy, download, expand/collapse file buttons and hide/show delete button for GitHub Gists
 // @author          maboloshi
@@ -24,13 +24,11 @@
   // 添加样式
   GM_addStyle(`
     .gist-expand-collapse-btn {
-      order: 3;
-
       display: inline-block;
       box-shadow: none;
       padding: 5px;
       border: 0;
-      margin: 0 0 0 6px;
+      margin: 0 6px 0 0;
       vertical-align: middle;
 
       line-height: 1;
@@ -41,9 +39,12 @@
     .gist-expand-collapse-btn:hover, .copy-download-btn > svg:hover {
       color: var(--fgColor-accent, var(--color-accent-fg));
     }
-    .gist-expand-collapse-btn-left {
-      order: unset;
-      margin: 0 6px 0 0;
+    .gist-expand-collapse-btn-right {
+      order: 3;
+      margin: 0 0 0 6px;
+    }
+    .gist-expand-collapse-btn-right > :last-child {
+      transform: rotateY(180deg);
     }
     .gist-file-box-collapsed, .gist-btn-hide {
       display: none !important;
@@ -194,7 +195,7 @@
       <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-down Details-content--hidden"><path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z"></path></svg>
       <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-right Details-content--shown gist-btn-hide"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
       `,
-      'gist-expand-collapse-btn', allowExpandCollapseBtnLeftFloat && 'gist-expand-collapse-btn-left'
+      'gist-expand-collapse-btn', !allowExpandCollapseBtnLeftFloat && 'gist-expand-collapse-btn-right'
       );
 
     const files = document.getElementsByClassName('file');
@@ -292,7 +293,7 @@
     expandCollapseBtnsArray.forEach(expandCollapseBtn => {
         const codeSquare = expandCollapseBtn.nextElementSibling.firstElementChild;
         codeSquare.classList.toggle('gist-btn-hide');
-        expandCollapseBtn.classList.toggle('gist-expand-collapse-btn-left');
+        expandCollapseBtn.classList.toggle('gist-expand-collapse-btn-right');
       });
 
     allowExpandCollapseBtnLeftFloat = !allowExpandCollapseBtnLeftFloat;
