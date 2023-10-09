@@ -2,7 +2,7 @@
 // @name            Github Gists: 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @name.en         Github Gists: Add copy, download and expand/collapse file buttons, hide/show delete button
 // @namespace       https://github.com/maboloshi/UserScripts/
-// @version         0.5.2
+// @version         0.5.4
 // @description     为 GitHub Gists 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @description.en  Adds copy, download, expand/collapse file buttons and hide/show delete button for GitHub Gists
 // @author          maboloshi
@@ -83,6 +83,11 @@
 
   // 折叠/展开按钮 默认在左侧
   let allowExpandCollapseBtnLeftFloat = GM_getValue("allowExpandCollapseBtnLeftFloat", true);
+
+  // 检测页面是不是某个Gist 页面
+  function isGistPage() {
+    return /^https:\/\/gist\.github\.com\/[\w-]+\/[a-f0-9]{32}(?:#)?$/.test(location.href);
+  }
 
   // 将文本复制到剪贴板
   function copyToClipboard(el, text) {
@@ -296,8 +301,6 @@
 
   // 初始化
   function init() {
-    const isGistPage = () => /^https:\/\/gist\.github\.com\/[\w-]+\/[a-f0-9]{32}(?:#)?$/.test(location.href);
-
     const loadButtons = () => {
       initButtons();
       initExpandCollapseAll();
@@ -330,7 +333,7 @@
 
   // 注册菜单
   GM_registerMenuCommand("显示/隐藏\"删除按钮\"", deleteBtnToggle);
-  GM_registerMenuCommand("切换折叠/展开按钮位置", toggleExpandCollapseBtnPosition);
+  GM_registerMenuCommand("切换折叠/展开按钮位置", isGistPage && toggleExpandCollapseBtnPosition);
 
   init();
 })();
