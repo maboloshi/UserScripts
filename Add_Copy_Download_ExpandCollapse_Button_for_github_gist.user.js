@@ -2,7 +2,7 @@
 // @name            Github Gists: 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @name.en         Github Gists: Add copy, download and expand/collapse file buttons, hide/show delete button
 // @namespace       https://github.com/maboloshi/UserScripts/
-// @version         0.5.7
+// @version         0.5.8
 // @description     为 GitHub Gists 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @description.en  Adds copy, download, expand/collapse file buttons and hide/show delete button for GitHub Gists
 // @author          maboloshi
@@ -87,6 +87,10 @@
   // 折叠/展开按钮 默认在左侧
   let allowExpandCollapseBtnLeftFloat = GM_getValue("allowExpandCollapseBtnLeftFloat", true);
 
+  // 初始化'折叠/展开全部按钮'为展开全部状态, 对应按钮文本 '折叠全部'
+  let isExpandedAll = true;
+  let isExpanded = [];
+  
   // 检测页面是不是某个Gist 页面
   function isGistPage() {
     return /^https:\/\/gist\.github\.com\/[\w-]+\/[a-f0-9]{32}(?:#)?$/.test(location.href);
@@ -203,7 +207,7 @@
     const files = document.getElementsByClassName('file');
     const filesArray = [...files]; // 缓存查询结果
 
-    filesArray.forEach(file => {
+    filesArray.forEach((file， index) => {
       const fileAction = file.firstElementChild.firstElementChild;
       const rawBtn_old = fileAction.firstElementChild;
       const fileUrl = rawBtn_old.href;
@@ -232,11 +236,10 @@
 
       // 创建折叠/展开按钮
       const expandCollapseBtn = expandCollapseBtnTmp.cloneNode(true);
+      isExpanded[index] = true; // 初始化每个'折叠/展开按钮'为展开状态
       expandCollapseBtn.addEventListener('click', () => {
-        const isExpanded = expandCollapseBtn.getAttribute('aria-label') === '折叠文件';
-
         expandCollapseBtn.classList.toggle('gist-expand-collapse-btn-collapsed');
-        expandCollapseBtn.setAttribute('aria-label', isExpanded ? '展开文件' : '折叠文件');
+        expandCollapseBtn.setAttribute('aria-label', isExpanded[index] ? '展开文件' : '折叠文件');
         file.children[1].classList.toggle('gist-file-box-collapsed');
       });
       if (allowExpandCollapseBtnLeftFloat) {
@@ -256,7 +259,6 @@
     listItem.appendChild(expandCollapseAllBtn);
     pageHeadActions.appendChild(listItem);
 
-    let isExpandedAll = true; // 初始化为展开全部状态 对应 -> '折叠全部'
     expandCollapseAllBtn.addEventListener('click', () => {
       expandCollapseAllBtn.textContent = isExpandedAll ? '展开全部' : '折叠全部';
       expandCollapseAllBtn.setAttribute('aria-label', isExpandedAll ? '展开全部文件' : '折叠全部文件');
@@ -270,9 +272,11 @@
         expandCollapseBtn.classList.toggle('gist-expand-collapse-btn-collapsed', isExpandedAll);
         expandCollapseBtn.setAttribute('aria-label', isExpandedAll ? '展开文件' : '折叠文件');
         fileContainer.classList.toggle('gist-file-box-collapsed', isExpandedAll);
+
+        isExpanded[index] = !isExpandedAll; // 反转每个'折叠/展开全部按钮'状态
       });
 
-      isExpandedAll = !isExpandedAll; // 反转'折叠/展开全部按钮'状态
+      isExpandedAll = !isExpandedAll; // 反转'折叠/展开按钮'状态
     });
   }
 
