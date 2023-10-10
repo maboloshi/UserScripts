@@ -273,10 +273,10 @@
         expandCollapseBtn.setAttribute('aria-label', isExpandedAll ? '展开文件' : '折叠文件');
         fileContainer.classList.toggle('gist-file-box-collapsed', isExpandedAll);
 
-        isExpanded[index] = !isExpandedAll; // 反转每个'折叠/展开全部按钮'状态
+        isExpanded[index] = !isExpandedAll; // 反转每个'折叠/展开按钮'状态
       });
 
-      isExpandedAll = !isExpandedAll; // 反转'折叠/展开按钮'状态
+      isExpandedAll = !isExpandedAll; // 反转'折叠/展开全部按钮'状态
     });
   }
 
