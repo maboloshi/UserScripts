@@ -2,7 +2,7 @@
 // @name            Github Gists: 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @name.en         Github Gists: Add copy, download and expand/collapse file buttons, hide/show delete button
 // @namespace       https://github.com/maboloshi/UserScripts/
-// @version         0.5.8
+// @version         0.5.9
 // @description     为 GitHub Gists 添加复制、下载和展开/折叠文件按钮，隐藏/显示删除按钮
 // @description.en  Adds copy, download, expand/collapse file buttons and hide/show delete button for GitHub Gists
 // @author          maboloshi
@@ -51,7 +51,7 @@
       padding: unset;
     }
     .gist-expand-collapse-btn:hover,
-    .copy-download-btn > :hover {
+    .copy-download-btn:hover > svg {
       color: var(--fgColor-accent, var(--color-accent-fg));
     }
     .gist-expand-collapse-btn-right {
@@ -77,10 +77,14 @@
     }
     .file-actions.file-actions > * {
       display: inline-grid;
+      position: relative;
       place-content: center;
       height: 28px;
       margin-inline-end: -1px;
       border-radius: 0;
+    }
+    .file-actions.file-actions > *:hover {
+      z-index: 1;
     }
     `);
 
