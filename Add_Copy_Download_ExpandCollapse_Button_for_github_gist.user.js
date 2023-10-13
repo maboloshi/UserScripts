@@ -88,12 +88,9 @@
     }
     `);
 
-  // 折叠/展开按钮 默认在左侧
-  let allowExpandCollapseBtnLeftFloat = GM_getValue("allowExpandCollapseBtnLeftFloat", true);
-
-  // 初始化'折叠/展开全部按钮'为展开全部状态, 对应按钮文本 '折叠全部'
-  let isExpandedAll = true;
-  let isExpanded = [];
+  let allowExpandCollapseBtnLeftFloat = GM_getValue("allowExpandCollapseBtnLeftFloat", true), // 折叠/展开按钮 默认在左侧
+      isExpandedAll = true, // 初始化'折叠/展开全部按钮'为展开全部状态, 对应按钮文本 '折叠全部'
+      isExpanded = [];      // 控制'折叠/展开按钮'状态
   
   // 检测页面是不是某个Gist 页面
   function isGistPage() {
@@ -145,8 +142,8 @@
         url: fileUrl,
         onload: (res) => {
           try {
-            const { status, response } = res;
-            const rawText = (status === 200) ? response : "";
+            const { status, response } = res,
+                  rawText = (status === 200) ? response : "";
             resolve(rawText);
           } catch (error) {
             console.error('获取失败', error);
@@ -176,46 +173,27 @@
 
   // 初始化按钮
   function initButtons() {
-    const rawBtnTmp = createButton(
-      'A',
-      '源码',
-      '查看源码',
-      '',
-      'btn', 'raw-btn'
-      );
-    const copyBtnTmp = createButton(
-      'BUTTON',
-      '复制',
-      '复制原始文件',
-      `<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-copy"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>`,
-      'btn', 'copy-download-btn'
-      );
-    const downloadBtnTmp = createButton(
-      'BUTTON',
-      '下载',
-      '下载原始文件',
-      `<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-download"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"></path><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"></path></svg>`,
-      'btn', 'copy-download-btn',
-      );
-    const expandCollapseBtnTmp = createButton(
-      'BUTTON',
-      '折叠',
-      '折叠文件',
-      `
-      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-chevron-down Details-content--hidden"><path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z"></path></svg>
-      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-chevron-right Details-content--shown"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-      `,
-      'gist-expand-collapse-btn', !allowExpandCollapseBtnLeftFloat && 'gist-expand-collapse-btn-right'
-      );
+    const rawBtnTmp = createButton('A', '源码', '查看源码', '', 'btn', 'raw-btn'),
+          copyBtnTmp = createButton('BUTTON', '复制', '复制原始文件',
+            `<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-copy"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>`,
+            'btn', 'copy-download-btn'
+            ),
+          downloadBtnTmp = createButton('BUTTON', '下载', '下载原始文件',
+            `<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-download"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"></path><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"></path></svg>`,
+            'btn', 'copy-download-btn',
+            ),
+          expandCollapseBtnTmp = createButton('BUTTON', '折叠', '折叠文件',
+            `<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-chevron-down Details-content--hidden"><path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z"></path></svg>
+             <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-chevron-right Details-content--shown"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>`,
+            'gist-expand-collapse-btn', !allowExpandCollapseBtnLeftFloat && 'gist-expand-collapse-btn-right'
+            );
 
-    const files = document.getElementsByClassName('file');
-    const filesArray = [...files]; // 缓存查询结果
-
-    filesArray.forEach((file， index) => {
-      const fileAction = file.firstElementChild.firstElementChild;
-      const rawBtn_old = fileAction.firstElementChild;
-      const fileUrl = rawBtn_old.href;
-      const fileName = file.querySelector('.gist-blob-name').innerText;
+    const files = [...document.getElementsByClassName('file')];
+    files.forEach((file, index) => {
+      const fileAction = file.firstElementChild.firstElementChild,
+            rawBtn_old = fileAction.firstElementChild,
+            fileUrl = rawBtn_old.href,
+            fileName = file.querySelector('.gist-blob-name').innerText;
 
       // 创建新Raw按钮
       const rawBtn = rawBtnTmp.cloneNode(true);
@@ -225,8 +203,8 @@
       // 创建复制按钮
       const copyBtn = copyBtnTmp.cloneNode(true);
       copyBtn.addEventListener('click', async () => {
-        const fileBox = file.getElementsByTagName('textarea')[0];
-        const fileContent = fileBox?.innerText || await getRawText(fileUrl);
+        const fileBox = file.getElementsByTagName('textarea')[0],
+              fileContent = fileBox?.innerText || await getRawText(fileUrl);
         copyToClipboard(copyBtn, fileContent);
       });
       fileAction.appendChild(copyBtn);
@@ -257,9 +235,9 @@
 
   // 初始化折叠/展开全部按钮
   function initExpandCollapseAll() {
-    const pageHeadActions = document.querySelector('.pagehead-actions');
-    const expandCollapseAllBtn = createButton('折叠全部', '折叠全部文件', '', 'Button--secondary', 'Button--small', 'Button', 'Button--fullWidth');
-    const listItem = document.createElement('li');
+    const pageHeadActions = document.querySelector('.pagehead-actions'),
+          expandCollapseAllBtn = createButton('折叠全部', '折叠全部文件', '', 'Button--secondary', 'Button--small', 'Button', 'Button--fullWidth'),
+          listItem = document.createElement('li');
     listItem.appendChild(expandCollapseAllBtn);
     pageHeadActions.appendChild(listItem);
 
@@ -267,10 +245,8 @@
       expandCollapseAllBtn.textContent = isExpandedAll ? '展开全部' : '折叠全部';
       expandCollapseAllBtn.setAttribute('aria-label', isExpandedAll ? '展开全部文件' : '折叠全部文件');
 
-      const expandCollapseBtns = document.getElementsByClassName('gist-expand-collapse-btn');
-      const expandCollapseBtnsArray = [...expandCollapseBtns]; // 缓存查询结果
-
-      expandCollapseBtnsArray.forEach(expandCollapseBtn => {
+      const expandCollapseBtns = [...document.getElementsByClassName('gist-expand-collapse-btn')];
+      expandCollapseBtns.forEach((expandCollapseBtn, index) => {
         const fileContainer = expandCollapseBtn.parentElement.nextElementSibling;
 
         expandCollapseBtn.classList.toggle('gist-expand-collapse-btn-collapsed', isExpandedAll);
@@ -294,10 +270,8 @@
 
   // 切换展开/折叠按钮位置
   function toggleExpandCollapseBtnPosition() {
-    const expandCollapseBtns = document.getElementsByClassName('gist-expand-collapse-btn');
-    const expandCollapseBtnsArray = [...expandCollapseBtns]; // 缓存查询结果
-
-    expandCollapseBtnsArray.forEach(expandCollapseBtn => {
+    const expandCollapseBtns = [...document.getElementsByClassName('gist-expand-collapse-btn')];
+    expandCollapseBtns.forEach(expandCollapseBtn => {
         const codeSquare = expandCollapseBtn.nextElementSibling.firstElementChild;
         codeSquare.classList.toggle('gist-btn-hide');
         expandCollapseBtn.classList.toggle('gist-expand-collapse-btn-right');
