@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          GithubGoTop
 // @name:CN-zh_cn Github一键返回顶部
-// @version       0.5.4
+// @version       0.5.5
 // @description   scrolltop
 // @author        gaojr, maboloshi
 // @namespace     https://github.com/maboloshi/UserScripts
@@ -18,7 +18,6 @@
 // ==/UserScript==
 
 (function () {
-  let goTopBtn = null;
 
   function addIcon() {
 
@@ -39,22 +38,26 @@
       // 页面平滑滚动到页面顶部
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    return goTopBtn;
   }
 
-  function toggleMode() {
-    const github_mode = document.documentElement.getAttribute('data-color-mode');
-    const system_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDarkMode = github_mode !== "light" && (github_mode === "dark" || system_dark);
+  function toggleMode(system_dark = '') {
+    const github_mode = document.documentElement.getAttribute('data-color-mode'),
+          isSystemDark = system_dark || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches),
+          isDarkMode = github_mode !== "light" && (github_mode === "dark" || isSystemDark);
     if (goTopBtn) {
       goTopBtn.classList.toggle('GoTopBtn__invert', isDarkMode);
     }
   }
 
   function init() {
-    addIcon();
+    let goTopBtn = addIcon();
 
     // 监视系统的明暗主题设置
-    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', toggleMode);
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+      toggleMode(event.matches);
+    });
 
     // 监视 GitHub 的明暗主题设置
     new window.MutationObserver(mutations => {
