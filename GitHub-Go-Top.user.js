@@ -18,6 +18,7 @@
 // ==/UserScript==
 
 (function () {
+  let goTopBtn = null;
 
   function addIcon() {
 
@@ -38,8 +39,6 @@
       // 页面平滑滚动到页面顶部
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-
-    return goTopBtn;
   }
 
   function toggleMode(system_dark = '') {
@@ -52,7 +51,7 @@
   }
 
   function init() {
-    let goTopBtn = addIcon();
+    addIcon();
 
     // 监视系统的明暗主题设置
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
