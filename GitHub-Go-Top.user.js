@@ -29,7 +29,7 @@
       .GoTopBtn__hide { display: none !important; }
     `);
 
-    const goTopBtn = document.createElement('div');
+    goTopBtn = document.createElement('div');
     goTopBtn.classList.add('GoTopBtn', 'GoTopBtn__no-print', 'GoTopBtn__hide', 'tooltipped', 'tooltipped-n');
     goTopBtn.textContent = '🔝' ;
     goTopBtn.setAttribute('aria-label', "回到顶部");
