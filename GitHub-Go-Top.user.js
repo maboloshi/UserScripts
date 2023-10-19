@@ -29,7 +29,7 @@
       .GoTopBtn__hide { display: none !important; }
     `);
 
-    goTopBtn = document.createElement('div');
+    const goTopBtn = document.createElement('div');
     goTopBtn.classList.add('GoTopBtn', 'GoTopBtn__no-print', 'GoTopBtn__hide', 'tooltipped', 'tooltipped-n');
     goTopBtn.textContent = '🔝' ;
     goTopBtn.setAttribute('aria-label', "回到顶部");
@@ -39,6 +39,8 @@
       // 页面平滑滚动到页面顶部
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    return goTopBtn;
   }
 
   function toggleMode(system_dark = '') {
@@ -51,7 +53,7 @@
   }
 
   function init() {
-    addIcon();
+    goTopBtn = addIcon();
 
     // 监视系统的明暗主题设置
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
